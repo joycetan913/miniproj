@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Movies</title>
+        <!-- Bootstrap 5 CSS for styling -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <!-- Navbar Section -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">MovieApp</a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <!-- Discover Link -->
+                        <li class="nav-item">
+                            <a
+                                class="nav-link active"
+                                href="/movies"
+                                th:href="@{/movies}"
+                                >Discover</a
+                            >
+                        </li>
+                        <!-- Watchlist Link -->
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="/watchlist"
+                                th:href="@{/watchlist}"
+                                >WatchList</a
+                            >
+                        </li>
+                        <!-- Logout Link -->
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="/logout"
+                                th:href="@{/logout}"
+                                >Logout</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <h1 class="mt-4">Movies</h1>
+            <!-- Display Success/Failure Message -->
+            <div th:if="${message}" class="alert alert-info" role="alert">
+                <p th:text="${message}"></p>
+            </div>
+            <!-- Display Movies -->
+            <div class="row">
+                <div class="col-md-12" th:each="movie : ${movies}">
+                    <div class="card mb-4">
+                        <div class="row g-0">
+                            <!-- Movie Poster -->
+                            <div
+                                class="col-md-4"
+                                style="display: flex; cursor: pointer"
+                                data-bs-toggle="modal"
+                                data-bs-target="#movieModal"
+                                th:attr="onclick=|openModal('${movie.poster_path}')|"
+                            >
+                                <img
+                                    th:src="${movie.poster_path}"
+                                    class="card-img-top img-fluid"
+                                    alt="Movie Poster"
+                                    style="
+                                        max-height: 180px;
+                                        object-fit: contain;
+                                        margin: auto;
+                                    "
+                                />
+                            </div>
+
+                            <!-- Movie Details -->
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5
+                                        class="card-title"
+                                        th:text="${movie.title}"
+                                    ></h5>
+                                    <p
+                                        class="card-text"
+                                        th:text="${movie.overview}"
+                                    ></p>
+
+                                    <!-- Movie Details in Three Columns -->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="card-text">
+                                                <strong>Language:</strong>
+                                                <span
+                                                    th:text="${movie.original_language}"
+                                                ></span>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>Release Date:</strong>
+                                                <span
+                                                    th:text="${movie.release_date}"
+                                                ></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="card-text">
+                                                <strong>Popularity:</strong>
+                                                <span
+                                                    th:text="${movie.popularity}"
+                                                ></span>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>Vote Average:</strong>
+                                                <span
+                                                    th:text="${movie.vote_average}"
+                                                ></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="card-text">
+                                                <strong>Vote Count:</strong>
+                                                <span
+                                                    th:text="${movie.vote_count}"
+                                                ></span>
+                                            </p>
+                                            <p class="card-text">
+                                                <strong>Watched:</strong>
+                                                <span
+                                                    th:text="${movie.hasWatched ? 'Yes' : 'No'}"
+                                                ></span>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Add Button for Each Movie -->
+                                    <form action="/movies/add" method="POST">
+                                        <input
+                                            type="hidden"
+                                            name="movieId"
+                                            th:value="${movie.id}"
+                                        />
+                                        <button
+                                            type="submit"
+                                            class="btn btn-success btn-sm"
+                                        >
+                                            Add to List
+                                        </button>
+                                    </form>
+
+                                    <!-- Delete Button (if needed)
+                                    <form action="/movies/delete" method="POST" class="mt-2">
+                                        <input type="hidden" name="movieId" th:value="${movie.id}" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <!-- Pagination code here... -->
+                    <!-- Pagination Controls -->
+                    <div class="d-flex justify-content-center">
+                        <ul class="pagination">
+                            <!-- First page button -->
+                            <li
+                                class="page-item"
+                                th:classappend="${currentPage == 1} ? 'disabled'"
+                            >
+                                <a class="page-link" href="?page=1">First</a>
+                            </li>
+
+                            <!-- Previous button -->
+                            <li
+                                class="page-item"
+                                th:classappend="${currentPage == 1} ? 'disabled'"
+                            >
+                                <a
+                                    class="page-link"
+                                    href="#"
+                                    th:href="@{|/movies?page=${currentPage - 1}|}"
+                                    >Previous</a
+                                >
+                            </li>
+
+                            <!-- Show pages before current page with ellipses (if needed) -->
+                            <li class="page-item" th:if="${currentPage > 4}">
+                                <span class="page-link">...</span>
+                            </li>
+
+                            <!-- Show the surrounding pages (current - 2, current - 1, current, current + 1, current + 2) -->
+                            <li
+                                class="page-item"
+                                th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+                                th:if="${i > 0 && i <= totalPages}"
+                                th:classappend="${i == currentPage} ? 'active'"
+                            >
+                                <a
+                                    class="page-link"
+                                    th:href="@{|/movies?page=${i}|}"
+                                    th:text="${i}"
+                                ></a>
+                            </li>
+
+                            <!-- Show pages after current page with ellipses (if needed) -->
+                            <li
+                                class="page-item"
+                                th:if="${currentPage < totalPages - 3}"
+                            >
+                                <span class="page-link">...</span>
+                            </li>
+
+                            <!-- Next button -->
+                            <li
+                                class="page-item"
+                                th:classappend="${currentPage == totalPages} ? 'disabled'"
+                            >
+                                <a
+                                    class="page-link"
+                                    href="#"
+                                    th:href="@{|/movies?page=${currentPage + 1}|}"
+                                    >Next</a
+                                >
+                            </li>
+
+                            <!-- Last page button -->
+                            <li
+                                class="page-item"
+                                th:classappend="${currentPage == totalPages} ? 'disabled'"
+                            >
+                                <a class="page-link" href="?page=${totalPages}"
+                                    >Last</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bootstrap Modal -->
+        <div
+            class="modal fade"
+            id="movieModal"
+            tabindex="-1"
+            aria-labelledby="movieModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="movieModalLabel">
+                            Movie Poster
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <img
+                            id="modalImage"
+                            class="img-fluid"
+                            src=""
+                            alt="Full-size Movie Poster"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS (Optional) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            // Function to open modal and set image source dynamically
+            function openModal(posterPath) {
+                const fullImageUrl = posterPath;
+                document.getElementById("modalImage").src = fullImageUrl;
+            }
+        </script>
+    </body>
+</html>
