@@ -16,11 +16,13 @@ public class UserRepo {
     RedisTemplate<String, Object> redisTemplate;
 
     // Save or update user in Redis
+    //hset Users {email} {user} 
     public void saveUser(User user) {
         redisTemplate.opsForHash().put(HASH_KEY_NAME, user.getEmail(), user);
     }
 
     // Get user by email (since email is the unique identifier)
+    //hget Users {email}
     public User getUserByEmail(String email) {
         return (User) redisTemplate.opsForHash().get(HASH_KEY_NAME, email);
     }
@@ -32,11 +34,13 @@ public class UserRepo {
     }
 
     // Delete user by email
+    //hdel Users {email}
     public void deleteUserByEmail(String email) {
         redisTemplate.opsForHash().delete(HASH_KEY_NAME, email);
     }
 
     // Check if the user exists
+    //hexists Users {email}
     public boolean existsByEmail(String email) {
         return redisTemplate.opsForHash().hasKey(HASH_KEY_NAME, email);
     }

@@ -19,6 +19,7 @@ public class MovieRepo {
     @Qualifier("redis-obj")
     RedisTemplate<String, Object> redisTemplate;
 
+    //hvals Movies
     public List<Movie> findAll() {
         List<Movie> payloads = redisTemplate
                 .opsForHash()
@@ -29,6 +30,7 @@ public class MovieRepo {
         return payloads;
     }
 
+    //hlen Movies
     public int size() {
         return redisTemplate.opsForHash().values(HASH_KEY_NAME).size();
     }
@@ -40,6 +42,7 @@ public class MovieRepo {
     // },
 
     // find movies by id
+    //get Movies {id}
     public Optional<Movie> findByMoviesId(int id) {
         String stringId = String.valueOf(id);
         Object result = redisTemplate.opsForHash().get(HASH_KEY_NAME, stringId);
@@ -54,7 +57,7 @@ public class MovieRepo {
         // return (ToDo) redisTemplate.opsForHash().get(HASH_KEY_NAME, id);
     }
 
-    // hset Movies id article - not used, shifted into user model.
+    // hset Movies {id} {movie} - not used, shifted into user model.
     public Movie save(Movie mov) {
         redisTemplate.opsForHash().put(HASH_KEY_NAME, String.valueOf(mov.getId()), mov);
         return mov;
