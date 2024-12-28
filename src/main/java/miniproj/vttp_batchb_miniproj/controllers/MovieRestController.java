@@ -61,6 +61,7 @@ public class MovieRestController {
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
+    //movie
     @GetMapping("/tmdb/movie/{movieId}")
     public ResponseEntity<Movie> getMovieDetail(@PathVariable("movieId") int movieId) {
         // Fetch the movies for the given page from the repository (this could be from

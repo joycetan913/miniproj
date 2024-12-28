@@ -42,6 +42,7 @@ public class MovieController {
     @Autowired
     private UserService userSvc;
 
+    //movie login
     @GetMapping("/movies")
     public String getLanding(@RequestParam(defaultValue = "1") int page, Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -51,8 +52,8 @@ public class MovieController {
             return "redirect:/";
         }
         // only when login then load this page
-        // Fetch the movies for the given page from the repository (this could be from
-        // DB or external API)
+        // fetch the movies for the given page from the repo (this could be from
+        // DB or ext API)
         MovieWrapper movies = movieSvc.getMovies(page);
         // Add the movies and pagination information to the model
         model.addAttribute("movies", movies.getMovies());
@@ -62,6 +63,7 @@ public class MovieController {
         return "movie";
     }
 
+    //movie review
     @GetMapping("/review/{movieId}")
     public String showReviewPage(@PathVariable("movieId") int movieId, Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -71,8 +73,8 @@ public class MovieController {
             return "redirect:/";
         }
         // only when login then load this page
-        // Fetch the movies for the given page from the repository (this could be from
-        // DB or external API)
+        // Fetch the movies for the given page from the repo (this could be from
+        // DB or ext API)
         User user = userSvc.getUserByEmail(userSession.getEmail());
         // Check if there are no movies found
         if (user == null) {
@@ -101,6 +103,7 @@ public class MovieController {
         return "review"; // review.html
     }
 
+    //delete movie from watchlist
     @PostMapping("/watchlist/delete")
     public String removeMovieFromWatchlist(int movieId, Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -113,7 +116,7 @@ public class MovieController {
             return "redirect:/";
         }
 
-        // For some reason the redis cannot find the current session user data.
+        // for some reason the redis cannot find the current session user data
         User user = userSvc.getUserByEmail(userSession.getEmail());
         if (user == null) {
             redirectAttributes.addFlashAttribute("message", "User not found.");
@@ -134,12 +137,12 @@ public class MovieController {
                 return "redirect:/watchlist";
             }
 
-            if (movieSvc.removeMovieToWatchlist(user, movieData)) {
+            if (movieSvc.removeMovieFromWatchlist(user, movieData)) {
                 redirectAttributes.addFlashAttribute("message", "Movie removed from watchlist successfully!");
-                // show pop up saying added on the same webpage triggering add
+                // show pop up saying added on the same webpage that triggers add
                 return "redirect:/watchlist";
             } else {
-                redirectAttributes.addFlashAttribute("message", "Movie not found, fail to removed from watchlist!");
+                redirectAttributes.addFlashAttribute("message", "Movie not found, failed to removed from watchlist!");
                 return "redirect:/watchlist";
             }
 
@@ -150,6 +153,7 @@ public class MovieController {
         }
     }
 
+    //show review pg after delete
     @PostMapping(path = "/watchlist/review", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public String removeMovieFromWatchlist(Integer movieId, String memories, Float myRating, Model model,
             HttpSession session,
@@ -200,6 +204,7 @@ public class MovieController {
         }
     }
 
+    //show watchlist
     @GetMapping("/watchlist")
     public String getLanding(Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -223,6 +228,7 @@ public class MovieController {
         return "watchlist";
     }
 
+    // add movie
     @PostMapping("/movies/add")
     public String addMovieToWatchList(int movieId, HttpSession session, RedirectAttributes redirectAttributes) {
         System.out.println("addMovieToWatchList: " + movieId);

@@ -50,7 +50,7 @@ public class MovieService {
         userRepo.saveUser(user);
     }
 
-    public boolean removeMovieToWatchlist(User user, Movie movie) {
+    public boolean removeMovieFromWatchlist(User user, Movie movie) {
         boolean hasRemoved = user.getWatchlist().removeIf((Movie lhs) -> {
             return lhs.getId() == movie.getId();
         });

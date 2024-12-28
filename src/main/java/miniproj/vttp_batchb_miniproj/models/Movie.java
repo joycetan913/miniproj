@@ -32,20 +32,6 @@ public class Movie implements Serializable {
     private String memories; // own param
     private float myRating; // own param
 
-    // @NotEmpty(message = "Please enter a valid email!")
-    // @Email(message = "Must be a well-formed email address!")
-    // private String user;
-
-    // @NotNull(message = "Please select a date!")
-    // @DateTimeFormat(pattern = "yyyy-MM-dd")
-    // @Future(message = "Date must be a future date!")
-    // private Date date;
-
-    // @NotEmpty(message = "Please choose at least 1 category!")
-    // private List<String> categories;
-
-    // @NotEmpty(message = "Content cannot be empty!")
-    // private String overview;
 
     public int getId() {
         return id;
@@ -146,6 +132,7 @@ public class Movie implements Serializable {
     public Movie() {
     }
 
+    //parametised constructor
     public Movie(int id, String title, String original_language, String overview, double popularity,
             String poster_path, LocalDate release_date, double vote_average, int vote_count, boolean hasWatched,
             String memories, float myRating) {
