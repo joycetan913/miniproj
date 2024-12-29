@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import miniproj.vttp_batchb_miniproj.models.Movie;
 import miniproj.vttp_batchb_miniproj.models.MovieWrapper;
 import miniproj.vttp_batchb_miniproj.models.User;
-import miniproj.vttp_batchb_miniproj.repositories.MovieRepo;
 import miniproj.vttp_batchb_miniproj.services.MovieService;
 import miniproj.vttp_batchb_miniproj.services.UserService;
 
@@ -61,7 +60,7 @@ public class MovieRestController {
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
-    //movie
+    // movie
     @GetMapping("/tmdb/movie/{movieId}")
     public ResponseEntity<Movie> getMovieDetail(@PathVariable("movieId") int movieId) {
         // Fetch the movies for the given page from the repository (this could be from
@@ -77,16 +76,4 @@ public class MovieRestController {
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
-    // public ResponseEntity<NewsArticle> getNewsById(@PathVariable("id") int id) {
-    // // Fetch the article by ID from Redis using the service
-    // NewsArticle article = newsService.getArticleById(id);
-
-    // if (article != null) {
-    // // Return the article with a 200 OK status
-    // return new ResponseEntity<>(article, HttpStatus.OK);
-    // } else {
-    // // If article not found, return 404 Not Found
-    // return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    // }
-    // }
 }

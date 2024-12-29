@@ -227,23 +227,12 @@
 
                                         <!-- Column for Review Button -->
                                         <div class="col-md-6">
-                                            <form
-                                                th:action="@{|/review/${movie.id}|}"
-                                                method="POST"
-                                                class="mt-2"
+                                            <a
+                                                th:href="@{|/review/${movie.id}|}"
+                                                class="btn btn-primary btn-sm w-100 mt-2"
                                             >
-                                                <input
-                                                    type="hidden"
-                                                    name="movieId"
-                                                    th:value="${movie.id}"
-                                                />
-                                                <a
-                                                    th:href="@{|/review/${movie.id}|}"
-                                                    class="btn btn-primary btn-sm w-100"
-                                                >
-                                                    Review
-                                                </a>
-                                            </form>
+                                                Review
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

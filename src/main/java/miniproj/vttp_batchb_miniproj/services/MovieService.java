@@ -28,13 +28,10 @@ import jakarta.json.JsonReader;
 import miniproj.vttp_batchb_miniproj.models.Movie;
 import miniproj.vttp_batchb_miniproj.models.MovieWrapper;
 import miniproj.vttp_batchb_miniproj.models.User;
-import miniproj.vttp_batchb_miniproj.repositories.MovieRepo;
 import miniproj.vttp_batchb_miniproj.repositories.UserRepo;
 
 @Service
 public class MovieService {
-    @Autowired
-    MovieRepo movieRepo;
 
     @Autowired
     UserRepo userRepo;
@@ -149,7 +146,7 @@ public class MovieService {
         }
     }
 
-    //build own db w 3rd party db
+    // build own db w 3rd party db
     Movie processMovie(String payload) {
         final String posterImageBaseUrl = "https://image.tmdb.org/t/p/w440_and_h660_face";
         JsonReader reader = Json.createReader(new StringReader(payload));
@@ -228,5 +225,6 @@ public class MovieService {
 
         mw.setMovies(listMovie);
         return mw;
-    }
-}
+    }}
+
+ 

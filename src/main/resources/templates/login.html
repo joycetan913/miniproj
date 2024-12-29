@@ -31,18 +31,27 @@
                                 If email does not exist, registration will be
                                 made.
                             </div>
-                            <form th:action="@{/login}" method="post">
+                            <form
+                                th:action="@{/login}"
+                                method="post"
+                                data-th-object="${user}"
+                            >
                                 <div class="mb-3">
                                     <label for="email" class="form-label"
                                         >Email</label
                                     >
                                     <input
-                                        type="email"
                                         class="form-control"
                                         id="email"
                                         name="email"
-                                        required
+                                        data-th-field="*{email}"
                                     />
+                                    <p
+                                        data-th-if="*{#fields.hasErrors('email')}"
+                                        data-th-errors="*{email}"
+                                        class="alert alert-danger mt-3"
+                                        role="alert"
+                                    ></p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label"
@@ -53,8 +62,15 @@
                                         class="form-control"
                                         id="password"
                                         name="password"
-                                        required
+                                        data-th-field="*{password}"
                                     />
+
+                                    <p
+                                        data-th-if="*{#fields.hasErrors('password')}"
+                                        data-th-errors="*{password}"
+                                        class="alert alert-danger mt-3"
+                                        role="alert"
+                                    ></p>
                                 </div>
                                 <div class="mb-3">
                                     <button
@@ -67,6 +83,7 @@
                             </form>
 
                             <!-- Error messages -->
+
                             <div
                                 th:if="${errorMessage}"
                                 class="alert alert-danger"

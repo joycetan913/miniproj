@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +28,6 @@ import miniproj.vttp_batchb_miniproj.constants.Constant;
 import miniproj.vttp_batchb_miniproj.models.Movie;
 import miniproj.vttp_batchb_miniproj.models.MovieWrapper;
 import miniproj.vttp_batchb_miniproj.models.User;
-import miniproj.vttp_batchb_miniproj.repositories.MovieRepo;
 import miniproj.vttp_batchb_miniproj.repositories.UserRepo;
 import miniproj.vttp_batchb_miniproj.services.MovieService;
 import miniproj.vttp_batchb_miniproj.services.UserService;
@@ -42,7 +42,7 @@ public class MovieController {
     @Autowired
     private UserService userSvc;
 
-    //movie login
+    // movie login
     @GetMapping("/movies")
     public String getLanding(@RequestParam(defaultValue = "1") int page, Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -56,6 +56,7 @@ public class MovieController {
         // DB or ext API)
         MovieWrapper movies = movieSvc.getMovies(page);
         // Add the movies and pagination information to the model
+        // Serialize into Json for Thymeleaf HTML to understand
         model.addAttribute("movies", movies.getMovies());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", movies.getTotalPages());
@@ -63,7 +64,7 @@ public class MovieController {
         return "movie";
     }
 
-    //movie review
+    // movie review view
     @GetMapping("/review/{movieId}")
     public String showReviewPage(@PathVariable("movieId") int movieId, Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -103,7 +104,7 @@ public class MovieController {
         return "review"; // review.html
     }
 
-    //delete movie from watchlist
+    // delete movie from watchlist
     @PostMapping("/watchlist/delete")
     public String removeMovieFromWatchlist(int movieId, Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -153,9 +154,9 @@ public class MovieController {
         }
     }
 
-    //show review pg after delete
+    // review pg after submit
     @PostMapping(path = "/watchlist/review", consumes = "application/x-www-form-urlencoded", produces = "application/json")
-    public String removeMovieFromWatchlist(Integer movieId, String memories, Float myRating, Model model,
+    public String reviewMovieFromWatchlist(Integer movieId, String memories, Float myRating, Model model,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
         Movie movieData = movieSvc.getMoviesById(movieId);
@@ -194,17 +195,17 @@ public class MovieController {
             movieData.setHasWatched(true);
             movieSvc.updateReviewMovie(user, movieData);
             redirectAttributes.addFlashAttribute("message", "Movie reviewed successfully!");
-            // show pop up saying added on the same webpage triggering add
+            // show pop up of successful review
             return "redirect:/watchlist";
 
         } else {
-            // show error pop up saying fail to add on the same webpage triggering add
-            redirectAttributes.addFlashAttribute("message", "Failed to remove movie from watchlist.");
+            // show error pop up
+            redirectAttributes.addFlashAttribute("message", "Failed to review movie from watchlist.");
             return "redirect:/watchlist";
         }
     }
 
-    //show watchlist
+    // show watchlist
     @GetMapping("/watchlist")
     public String getLanding(Model model, HttpSession session,
             RedirectAttributes redirectAttributes) {
@@ -275,64 +276,19 @@ public class MovieController {
     }
 }
 
-// @Autowired
-// private MovieService movieSvc;
+//     // health
+//     @GetMapping("/status")
+//     @ResponseBody
+//     public ResponseEntity<String> getHealthStatus() {
 
-// @GetMapping("/")
-// public ModelAndView getLanding() {
+//         String randomId = movieSvc.getRandomId();
 
-// ModelAndView mav = new ModelAndView("notice");
-// mav.addObject("movie", new Movie());
-// return mav;
-// }
-// }
+//         if (movieSvc.existingId(randomId) == true) {
+//             return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body("healthy");
+//         }
 
-// @PostMapping(path = "/movie", consumes = "application/x-www-form-urlencoded",
-// produces = "application/json")
-// public ModelAndView postNotice(@Valid @ModelAttribute Movie movie,
-// BindingResult bindings) {
-
-// ModelAndView mav = new ModelAndView();
-
-// if (bindings.hasErrors()) {
-// mav.setViewName("movie");
-// // return mav;
-// }
-// return mav;
-
-// // mav.addObject("movie", new Movie());
-// }
-// }
-
-// String response = noticeSvc.postToNoticeServer(notice);
-// // String[] respArray = response.split(",");
-// String[] respArray = (response.split(","));
-// String respId = respArray[0].replaceAll("\"", "").substring(4);
-
-// if (noticeSvc.existingId(respId) == true) {
-// mav.setViewName("successful");
-// mav.addObject("id", respId);
-// return mav;
-// } else {
-// mav.setViewName("failed");
-// mav.addObject("message", respArray[0]);
-// return mav;
-// }
-// }
-
-// @GetMapping("/status")
-// @ResponseBody
-// public ResponseEntity<String> getHealthStatus() {
-
-// String randomId = noticeSvc.getRandomId();
-
-// if (noticeSvc.existingId(randomId) == true) {
-// return
-// ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body("{}");
-// }
-
-// return
-// ResponseEntity.status(503).contentType(MediaType.APPLICATION_JSON).body("{}");
-// }
+//         return ResponseEntity.status(503).contentType(MediaType.APPLICATION_JSON).body("unhealthy");
+//     }
 
 // }
+
