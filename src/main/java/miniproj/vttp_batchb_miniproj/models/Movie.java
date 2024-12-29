@@ -29,6 +29,7 @@ public class Movie implements Serializable {
     private double vote_average;
     private int vote_count;
     private boolean hasWatched; // own param
+    @NotEmpty(message="Please fill in this field!")
     private String memories; // own param
     private float myRating; // own param
 

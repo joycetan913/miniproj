@@ -276,19 +276,4 @@ public class MovieController {
     }
 }
 
-//     // health
-//     @GetMapping("/status")
-//     @ResponseBody
-//     public ResponseEntity<String> getHealthStatus() {
-
-//         String randomId = movieSvc.getRandomId();
-
-//         if (movieSvc.existingId(randomId) == true) {
-//             return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body("healthy");
-//         }
-
-//         return ResponseEntity.status(503).contentType(MediaType.APPLICATION_JSON).body("unhealthy");
-//     }
-
-// }
 
